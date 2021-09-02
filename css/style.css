@@ -45,6 +45,22 @@ main {
     flex: 1 0 auto;
 }
 
+a {
+    text-decoration: none;
+    color: var(--fg);
+    border: 1px solid var(--gray1);
+    border-width: 0 0 1px 0;
+    padding-bottom: 4px;
+}
+
+a:visited {
+    color: var(--fg);
+}
+
+a:hover {
+    border-color: var(--fg);
+}
+
 /* Site header */ 
 
 nav {
@@ -59,12 +75,6 @@ nav a:first-of-type {
 
 nav a {
     transition: all 0.5s;
-    text-decoration: none;
-    color: var(--fg);
-}
-
-nav a:visited {
-    color: var(--fg);
 }
 
 nav a:hover {
@@ -128,6 +138,7 @@ nav a:hover {
 /* Parameters */ 
 
 footer {
-    margin-top: var(--full-margin);
+    margin: var(--full-margin) 0;
     flex-shrink: 0;
+    line-height: 1.3;
 }

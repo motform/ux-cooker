@@ -22,9 +22,6 @@ const parameterGroups = {
   ],
 };
 
-const defaultLevel   = 0;
-let activeCategories = 3;
-
 /* Modified from Eloquent Javascript to accept an object
    of {nodeClass and nodeId} for the created element.
    https://eloquentjavascript.net/14_dom.html */
@@ -55,15 +52,104 @@ function createParameter(group, parameter) {
 }
 
 /* Return a random entry in `xs`. */
-function randomEntry(xs) {
-  randomIndex = Math.floor(Math.random() * xs.length);
-  return xs[randomIndex];
+function randomIndex(xs) {
+  return Math.floor(Math.random() * xs.length);
 }
 
-function randomizeParameters() {
+function loadParameters(deserializedParameters) {
+  let i = 0;
   for (const [group, parameters] of Object.entries(parameterGroups)) {
-    createParameter(group, randomEntry(parameters));
+    createParameter(group, parameters[deserializedParameters[i]]);
+    i += 1;
   }
 }
 
-randomizeParameters();
+function randomizeParameters() {
+  let parameterIndicies = [];
+
+  for (const [group, parameters] of Object.entries(parameterGroups)) {
+    const i = randomIndex(parameters);
+    parameterIndicies.push(i);
+    createParameter(group, parameters[i]);
+  }
+
+  return parameterIndicies;
+}
+
+function encodeBase16(x) {
+  let encoded = x.toString(16);
+  if (encoded.length < 2) encoded = '0' + encoded;
+  return encoded;
+}
+
+function decodeBase16(x) {
+  return parseInt(x, 16);
+}
+
+/* A very classic, efficient way to partition an array that is way
+   overkill in this case. YAGNI etc. */
+function partition(n, xs, all=true) {
+  let result = [];
+  let tup = [xs[0]];
+
+  for (let i = 1; i < xs.length; i += 1) {
+    if (!(i % n)) {
+      result.push(tup);
+      tup = [];
+    }
+    tup.push(xs[i]);
+  }
+
+  if (all && tup.length) result.push(tup);
+  return result;
+}
+
+function serializeParameters(parameterIndicies) {
+  let serialization = "";
+
+  for (const index of parameterIndicies)
+    serialization += encodeBase16(index);
+
+  return serialization;
+}
+
+function deserializeParameters(serializedIndicies) {
+  let deserialization = [];
+
+  for (const index of partition(2, serializedIndicies))
+    deserialization.push(decodeBase16(index.join('')));
+
+  return deserialization;
+}
+
+function shareableLink(serializedParameters) {
+  const queryParams = new URLSearchParams({"p": serializedParameters});
+  const link = new URL(window.location.href + '?' + queryParams);
+  return link;
+}
+
+function writeToClipboard(x) {
+  return function() {
+    var data = [new ClipboardItem({ "text/plain": new Blob([x], {type: "text/plain"})})];
+    navigator.clipboard.write(data).then(function() {
+      console.log("Copied to clipboard successfully!");
+    }, function() {
+      console.error("Unable to write to clipboard. :-(");
+    });
+  }
+}
+
+const queryParams = new URLSearchParams(window.location.search);
+const serializedParameters = queryParams.get("p");
+let link;
+
+if (serializedParameters) {
+  loadParameters(deserializeParameters(serializedParameters));
+  link = window.location.href;
+} else {
+  const parameterIndicies = randomizeParameters();
+  link = shareableLink(serializeParameters(parameterIndicies));
+}
+
+const shareButton = document.querySelector("#share");
+shareButton.onclick = writeToClipboard(link);
