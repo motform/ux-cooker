@@ -1,22 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>UX Cooker</title>
-        <meta charset="utf-8" content="width=device-width, initial-scale=1" name="viewport">
-        <link href="/assets/icons/favicon.ico"  rel="icon">
-        <link href="/assets/icons/icon.svg"     rel="icon">
-        <link href="/assets/icons/icon-180.png" rel="apple-touch-icon">
+  <head>
+    <title>UX Cooker</title>
+    <meta charset="utf-8" content="width=device-width, initial-scale=1" name="viewport">
+    <link href="assets/icons/favicon.ico"  rel="icon">
+    <link href="assets/icons/icon.svg"     rel="icon">
+    <link href="assets/icons/icon-180.png" rel="apple-touch-icon">
 
-        <link href="/manifest.webmanifest" rel="manifest">
+    <link href="manifest.webmanifest" rel="manifest">
 
-        <link href="/css/reset.css" rel="stylesheet" type="text/css">
-        <link href="/css/font.css"  rel="stylesheet" type="text/css">
-        <link href="/css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/reset.css" rel="stylesheet" type="text/css">
+    <link href="css/font.css"  rel="stylesheet" type="text/css">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
 
-        <script src="/js/script.js"></script>
-    </head>
-    <body>
-        
-    </body>
+    <script src="js/script.js" defer></script>
+  </head>
+  <body>
+
+    <header>
+      <nav>
+        <a href="/"><h1>Sketchomatic!</h1></a>
+      </nav>
+    </header>
+
+    <main>
+
+      <header id="settings">
+        <input type="button" value="Simple" class="setting-active">
+        <input type="button" value="Complicated">
+        <input type="button" value="Contrived">
+        <input type="button" value="Share">
+      </header>
+
+      <section id="parameters">
+        <!-- This section is filled in by the script -->
+      </section>
+
+    </main>
+
+    <footer>
+      <p>Sketchomatic is a device for sailors to navigate the high seas.</p>
+    </footer>
+  </body>
 </html>
 

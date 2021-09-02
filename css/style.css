@@ -1,0 +1,133 @@
+/**
+ * © 2021 Love Lagerkvist
+ */
+
+:root {
+    --fg: black;
+    --bg: white;
+    --gray1: #bbbbbb;
+    --gray2: #eeeeee;
+    --full-margin: 40px;
+    --half-margin: calc(var(--full-margin) / 2);
+    --column-count: 3;
+}
+
+@media (max-width: 1000px) {
+    :root { --column-count: 2; }
+}
+
+@media (max-width: 700px) {
+    :root {
+        --column-count: 1;
+        --full-margin: 20px;
+    }
+}
+
+html {
+    -webkit-font-smoothing: antialiased;
+    font-family: "Plein", sans-serif;
+    height: 100%;
+}
+
+body {
+    margin: 0 auto;
+    padding: var(--full-margin);
+    max-width: 1200px;
+    background: var(--bg);
+
+    display: flex;
+    flex-direction: column;
+    min-height: 90%;
+}
+
+main {
+    margin-top: calc(var(--full-margin) * 3);
+    flex: 1 0 auto;
+}
+
+/* Site header */ 
+
+nav {
+    display: flex;
+    font-size: 16px;
+    font-variation-settings: 'wght' 700;
+}
+
+nav a:first-of-type {
+    margin-right: auto;
+}
+
+nav a {
+    transition: all 0.5s;
+    text-decoration: none;
+    color: var(--fg);
+}
+
+nav a:visited {
+    color: var(--fg);
+}
+
+nav a:hover {
+    font-variation-settings: 'wght' 900;
+}
+
+/* Settings */ 
+
+#settings {
+    display: flex;
+    margin-bottom: var(--full-margin);
+    border: 1px solid var(--gray2);
+    border-width: 1px 0;
+}
+
+#settings > input {
+    background: none;
+    color: var(--gray1);
+    border: none;
+    font-family: "Plein", sans-serif;
+    font-size: 16px;
+    padding: var(--half-margin);
+    cursor: pointer;
+    transition: all 0.5s;
+    margin: 0;
+}
+
+#settings > input:hover {
+    background: var(--gray2);
+}
+
+#settings > *:last-child {
+    margin-left: auto;
+    padding: var(--half-margin);
+}
+
+.setting-active {
+    font-variation-settings: 'wght' 600;
+    color: var(--fg);
+}
+
+/* Parameters */ 
+
+#parameters {
+    display: grid;
+    grid-template-columns: repeat(var(--column-count), 1fr);
+    grid-gap: var(--full-margin) var(--half-margin);
+}
+
+.parameter-group h2 {
+    font-variation-settings: 'wght' 700;
+    font-size: 52px;
+}
+
+.parameter-group h3 {
+    font-size: 16px;
+    margin-bottom: calc(var(--full-margin) / 4);
+    text-transform: capitalize;
+}
+
+/* Parameters */ 
+
+footer {
+    margin-top: var(--full-margin);
+    flex-shrink: 0;
+}
