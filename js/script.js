@@ -1,5 +1,13 @@
-/*
+/* TODO: change the word parameters, could be confusing for as it shadows function params
+ * 
+ * © 2021 Love Lagerkvist
  */
+
+"use strict";
+
+/*
+  Data:
+*/
 
 const parameterGroups = {
   scenario: [
@@ -21,6 +29,10 @@ const parameterGroups = {
     "Wearable",
   ],
 };
+
+/*
+  Functions:
+*/
 
 /* Modified from Eloquent Javascript to accept an object
    of {nodeClass and nodeId} for the created element.
@@ -64,6 +76,8 @@ function loadParameters(deserializedParameters) {
   }
 }
 
+/* Randomize paramaters, insert those into the DOM and return the
+   indices of where the chosen parameters are located in parameterGroups. */
 function randomizeParameters() {
   let parameterIndicies = [];
 
@@ -86,23 +100,6 @@ function decodeBase16(x) {
   return parseInt(x, 16);
 }
 
-/* A very classic, efficient way to partition an array that is way
-   overkill in this case. YAGNI etc. */
-function partition(n, xs, all=true) {
-  let result = [];
-  let tup = [xs[0]];
-
-  for (let i = 1; i < xs.length; i += 1) {
-    if (!(i % n)) {
-      result.push(tup);
-      tup = [];
-    }
-    tup.push(xs[i]);
-  }
-
-  if (all && tup.length) result.push(tup);
-  return result;
-}
 
 function serializeParameters(parameterIndicies) {
   let serialization = "";
@@ -116,8 +113,8 @@ function serializeParameters(parameterIndicies) {
 function deserializeParameters(serializedIndicies) {
   let deserialization = [];
 
-  for (const index of partition(2, serializedIndicies))
-    deserialization.push(decodeBase16(index.join('')));
+  for (let i = 0; i < serializedIndicies.length; i += 2)
+    deserialization.push(decodeBase16(serializedIndicies[i] + serializedIndicies[i+1]));
 
   return deserialization;
 }
@@ -139,17 +136,25 @@ function writeToClipboard(x) {
   }
 }
 
-const queryParams = new URLSearchParams(window.location.search);
-const serializedParameters = queryParams.get("p");
-let link;
+function setupParameters() {
+  let shareLink;
 
-if (serializedParameters) {
-  loadParameters(deserializeParameters(serializedParameters));
-  link = window.location.href;
-} else {
-  const parameterIndicies = randomizeParameters();
-  link = shareableLink(serializeParameters(parameterIndicies));
+  // Check if we have followed a link that included paramaters
+  const queryParams = new URLSearchParams(window.location.search);
+  const serializedParameters = queryParams.get("p");
+
+  if (serializedParameters) {
+    loadParameters(deserializeParameters(serializedParameters));
+    shareLink = window.location.href;
+  } else { // no shared params, so go pick some new ones!
+    const parameterIndicies = randomizeParameters();
+    shareLink = shareableLink(serializeParameters(parameterIndicies));
+  }
+
+  const shareButton = document.querySelector("#share");
+  shareButton.onclick = writeToClipboard(link);
 }
 
-const shareButton = document.querySelector("#share");
-shareButton.onclick = writeToClipboard(link);
+/* This is the code that will be executed when the browser visits this page: */
+
+setupParameters();
